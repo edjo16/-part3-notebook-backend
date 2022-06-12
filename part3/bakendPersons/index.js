@@ -50,7 +50,7 @@ thisnotebook? response.json(thisnotebook): response.status(404).end()
 
 app.delete('/api/persons/:id',(request, response)=>{
     const id= parseInt(request.params.id)
-    const newnotebook= persons.map(person => person.id !== id && person)
+    const newnotebook= persons.filter(person => person.id !== id && person)
     response.json(newnotebook)
 })
 
@@ -71,16 +71,12 @@ else if(persons.find(person => person.name === body.name )){
  }
     const note = {
         name: body.name,
-        nuber: body.number,
+        number: body.number,
        id: Math.floor(Math.random() *1000)
     }
     persons = persons.concat(note)
     response.json(note)
 })
-
-
-// morgan.token('body', (req, res) => JSON.stringify(req.body));
-// app.use(morgan(':method :url :status :response-time ms - :res[content-length] :body - :req[content-length]'));
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
