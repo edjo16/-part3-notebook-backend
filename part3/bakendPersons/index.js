@@ -3,6 +3,7 @@ import express, { json } from "express"
 import morgan from "morgan"
 import cors from 'cors'
 const app= express()
+app.use(express.static('build'))
 app.use(express.json())
 app.use(cors())
 morgan.token('body', (req, res) => console.log(JSON.stringify(req.body)));
