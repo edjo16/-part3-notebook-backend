@@ -50,7 +50,7 @@ thisnotebook? response.json(thisnotebook): response.status(404).end()
 
 app.delete('/api/persons/:id',(request, response)=>{
     const id= parseInt(request.params.id)
-    const newnotebook= persons.filter(person => person.id !== id && person)
+    const newnotebook= persons.filter(person => person.id !== id )
     response.json(newnotebook)
 })
 
