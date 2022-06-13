@@ -2,11 +2,13 @@
 import express, { json } from "express"
 import morgan from "morgan"
 import cors from 'cors'
+import { createProxyMiddleware } from 'http-proxy-middleware';
 const app= express()
 app.use(express.static('build'))
 app.use(express.json())
 app.use(cors())
 morgan.token('body', (req, res) => console.log(JSON.stringify(req.body)));
+
 
 
 let persons =[
@@ -78,7 +80,14 @@ else if(persons.find(person => person.name === body.name )){
     persons = persons.concat(note)
     response.json(note)
 })
-
+ 
+app.use(
+  '/api',
+  createProxyMiddleware({
+    target: 'http://localhost:3001',
+    changeOrigin: true,
+  })
+);
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
