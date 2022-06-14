@@ -3,12 +3,13 @@ import express, { json } from "express"
 import morgan from "morgan"
 import cors from 'cors'
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import Person from './models/person'
+import 'dotenv/config'
 const app= express()
 app.use(express.static('build'))
 app.use(express.json())
 app.use(cors())
 morgan.token('body', (req, res) => console.log(JSON.stringify(req.body)));
-
 
 
 let persons =[
@@ -34,8 +35,10 @@ let persons =[
     }
 ]
 
-app.get('/api/persons',(request, response)=>{
-        response.json(persons)
+app.get('/api/people',(request, response)=>{
+  Person.find({}).then(person =>{
+    response.json(person)
+  })
 })
 app.get('/api/info',(request, response)=>{
     const entrys= persons.length
