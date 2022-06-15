@@ -36,13 +36,12 @@ app.delete('/api/people/:id',(request, response)=>{
     .then(result => {
       response.status(204).end()
     })
-    .catch(error => response.status(404).json({
-      error: 'data does not exist'
-  }))
+    .catch(error => next(error))
     // const id= parseInt(request.params.id)
     //     Person =Person.filter(person => person.id !== id )
     //     response.status(204).end() 
-})
+  })
+
 
 
 
