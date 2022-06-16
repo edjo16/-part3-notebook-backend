@@ -80,15 +80,16 @@ Person.find({}).then(persons => {
 
 app.put('/api/people/:id', (request, response, next) => {
   const body = request.body
-  const {number}= request.body
-  
-
-  Person.findByIdAndUpdate(request.params.id, number, { new: true,  runValidators: true, context: 'query' })
+  const person = {
+    number: body.number
+  }
+  Person.findByIdAndUpdate(request.params.id, person, { new: true,  runValidators: true, context: 'query' })
     .then(updatedNote => {
       response.json(updatedNote)
     })
     .catch(error => next(error))
 })
+
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
