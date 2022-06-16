@@ -42,9 +42,7 @@ app.delete('/api/people/:id',(request, response, next)=>{
       response.status(204).end()
     })
     .catch(error => next(error))
-    // const id= parseInt(request.params.id)
-    //     Person =Person.filter(person => person.id !== id )
-    //     response.status(204).end() 
+   
   })
 
 
