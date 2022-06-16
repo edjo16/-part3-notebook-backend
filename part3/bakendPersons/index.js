@@ -59,14 +59,13 @@ app.post('/api/people',(request, response, next)=>{
     })
 }
 Person.find({}).then(persons => {
-  console.log('persons: ', persons)
-
-  if (persons.some(person => person.name === body.name)) {
-      console.log("name must be unique")
-      return response.status(400).json({
-          error: 'name must be unique'
-      })
-  }
+  // I commented this because I want to use the put, if the name is already in the server I want to replace the number
+  // if (persons.some(person => person.name === body.name)) {
+  //     console.log("name must be unique")
+  //     return response.status(400).json({
+  //         error: 'name must be unique'
+  //     })
+  // }
   const person = new Person({
     name: body.name,
     number: body.number,
@@ -83,7 +82,8 @@ app.put('/api/people/:id', (request, response, next) => {
   const person = {
     number: body.number
   }
-  Person.findByIdAndUpdate(request.params.id, person, { new: true,  runValidators: true, context: 'query' })
+  // Person.findByIdAndUpdate(request.params.id, person, { new: true,  runValidators: true, context: 'query' })
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
     .then(updatedNote => {
       response.json(updatedNote)
     })
