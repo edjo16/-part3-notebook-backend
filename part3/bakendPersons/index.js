@@ -35,7 +35,7 @@ app.get('/api/people/:id',(request, response)=>{
  })
 })
 
-app.delete('/api/people/:id',(request, response)=>{
+app.delete('/api/people/:id',(request, response, next)=>{
        
     Person.findByIdAndRemove(request.params.id)
     .then(result => {
@@ -59,6 +59,7 @@ app.post('/api/people',(request, response, next)=>{
     })
 }
 Person.find({}).then(persons => {
+  console.log('persons: ', persons)
   // I commented this because I want to use the put, if the name is already in the server I want to replace the number
   // if (persons.some(person => person.name === body.name)) {
   //     console.log("name must be unique")
@@ -68,8 +69,9 @@ Person.find({}).then(persons => {
   // }
   const person = new Person({
     name: body.name,
-    number: body.number,
+    number: body.number
 })
+
     person.save().then(savedPerson =>{
       response.json(savedPerson)
     })
