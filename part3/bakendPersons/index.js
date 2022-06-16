@@ -5,11 +5,16 @@ import cors from 'cors'
 import Person from './models/person.js'
 import 'dotenv/config'
 const app= express()
-app.use(express.static('build'))
 app.use(express.json())
 app.use(cors())
-morgan.token('body', (req, res) => console.log(JSON.stringify(req.body)));
+app.use(express.static('build'))
 
+
+// create custome message in the middleweare s
+morgan.token('ob', function (req) {
+  return `${JSON.stringify(req.body)}`
+})
+app.use(morgan(':method :url :status :response-time :req[header] :ob'))
 
 app.get('/api/people',(request, response)=>{
   Person.find({}).then(person =>{
@@ -45,7 +50,7 @@ app.delete('/api/people/:id',(request, response)=>{
 
 
 
-app.post('/api/people',(request, response)=>{
+app.post('/api/people',(request, response, next)=>{
  const body= request.body
 
  if(!body.name || !body.number ){
@@ -69,24 +74,31 @@ Person.find({}).then(persons => {
     person.save().then(savedPerson =>{
       response.json(savedPerson)
     })
+    .catch(error => next(error))
 })
 })
 
 app.put('/api/people/:id', (request, response, next) => {
   const body = request.body
+  const {number}= request.body
+  
 
-  const person = {
-    number: body.number,
-}
-
-  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+  Person.findByIdAndUpdate(request.params.id, number, { new: true,  runValidators: true, context: 'query' })
     .then(updatedNote => {
       response.json(updatedNote)
     })
     .catch(error => next(error))
 })
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
 
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {    return response.status(400).json({ error: error.message })  }
 
+  next(error)
+}
+app.use(errorHandler)
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
