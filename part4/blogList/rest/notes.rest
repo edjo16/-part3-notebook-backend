@@ -1,0 +1,10 @@
+POST  http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVkam8xNiIsImlkIjoiNjJiOGFjNjM4ZWU0NTYwODg2ZDRjYTk3IiwiaWF0IjoxNjU2MzQ5NzYxfQ.i6jBqoKttNwuWMQBGFHlqFfElzSQ4vjDq-GCyNksUGk"
+
+{
+"title":"Enlola holes",
+"author":" the strangers brothers",
+"url":"strangelola.com",
+"likes":100
+}
